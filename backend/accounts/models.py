@@ -46,7 +46,11 @@ class ProfileManager(models.Manager):
 
 class Profile(models.Model):
     user            = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    bio             = models.TextField(max_length=200)
     following       = models.ManyToManyField(User, blank=True, related_name='followed_by')
+    blocked         = models.ManyToManyField(User, blank=True, related_name='blocked_by')
+    privacy         = models.BooleanField(default=False)
+    nsfw_filter     = models.BooleanField(default=True)
     profilePic      = models.ImageField(upload_to='profilePics/', null=True)
     coverPic        = models.ImageField(upload_to='coverPics/', null=True)
     objects         = ProfileManager()
