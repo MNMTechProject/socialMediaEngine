@@ -3,8 +3,9 @@ from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, permissions
-from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
+from .serializers import UserDisplaySerializer, RegisterSerializer, LoginSerializer, UserSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.models import User
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -24,7 +25,7 @@ class RegisterAPI(generics.GenericAPIView):
         user = serializer.save()
         tokens = get_tokens_for_user(user)
         return Response({
-            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "user": UserDisplaySerializer(user, context=self.get_serializer_context()).data,
             "token": tokens
         })
 
@@ -42,7 +43,7 @@ class LoginAPI(generics.GenericAPIView):
         if user:
             tokens = get_tokens_for_user(user)
             return Response({
-                "user": UserSerializer(user, context=self.get_serializer_context()).data,
+                "user": UserDisplaySerializer(user, context=self.get_serializer_context()).data,
                 "tokens": tokens
             })
         else:
@@ -53,7 +54,16 @@ class UserAPI(generics.RetrieveAPIView):
     permission_classes = [
         permissions.IsAuthenticated,
     ]
-    serializer_class = UserSerializer
+    serializer_class = UserDisplaySerializer
 
     def get_object(self):
         return self.request.user
+    
+    def get(self, request, username):
+        try:
+            user = User.objects.get(username=username)  # Fetch user by username from URL
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=404)
+        
+        serializer = UserDisplaySerializer(user)
+        return Response(serializer.data)

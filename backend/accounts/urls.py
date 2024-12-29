@@ -6,8 +6,10 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
+app_name = 'accounts'
+
 urlpatterns = [
     path('login/', LoginAPI.as_view()),
     path('signup/', RegisterAPI.as_view()),
-    path('<userID>', UserAPI.as_view()),
+    path('<username>', UserAPI.as_view(), name='profile'),
 ]
