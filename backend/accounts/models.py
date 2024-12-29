@@ -46,7 +46,7 @@ class ProfileManager(models.Manager):
 
 class Profile(models.Model):
     user            = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    bio             = models.TextField(max_length=200)
+    bio             = models.TextField(max_length=200, default="")
     following       = models.ManyToManyField(User, blank=True, related_name='followed_by')
     blocked         = models.ManyToManyField(User, blank=True, related_name='blocked_by')
     privacy         = models.BooleanField(default=False)
