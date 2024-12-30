@@ -14,16 +14,32 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: '#0082ad', // Active tab label color
+        tabBarInactiveTintColor: 'gray', // Inactive tab label color
+        tabBarActiveBackgroundColor : '#babfbf', // Active tab background color
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
+        tabBarLabelStyle: {
+          fontSize: 14, // Font size of tab labels
+          fontWeight: 'bold', // Make tab labels bold
+          fontFamily: 'arial',
+        },
         tabBarStyle: Platform.select({
           ios: {
             // Use a transparent background on iOS to show the blur effect
             position: 'absolute',
+            backgroundColor: '#dae0e0', // Background color
+            height: 60, // Height of the tab bar
+            borderTopWidth: 0, // Remove top border
+            paddingHorizontal: 0, // Add horizontal padding
           },
-          default: {},
+          default: {
+            backgroundColor: '#dae0e0', // Background color
+            height: 60, // Height of the tab bar
+            borderTopWidth: 0, // Remove top border
+            paddingHorizontal: 0, // Add horizontal padding
+          },
         }),
       }}>
       <Tabs.Screen
