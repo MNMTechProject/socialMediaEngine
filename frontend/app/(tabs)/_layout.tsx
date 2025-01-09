@@ -7,9 +7,22 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors1';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { Redirect } from 'expo-router';
+import { useAuth } from '../(auth)/authContext';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+
+  const { isAuthenticated, user } = useAuth();
+
+  if (!isAuthenticated) {
+    return <Redirect href="/(auth)/login" />;
+  }
+
+  // If authenticated but no user, try to get username from storage
+  if (!user?.username) {
+    console.log("No user data in context, falling back to default");
+  }
 
   return (
     <Tabs
@@ -64,10 +77,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="[username]"
         options={{
           title: 'Profile',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="code" color={color} />,
+        }}
+        initialParams={{
+          username: user?.username  // Provide a fallback value
         }}
       />
     </Tabs>

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, Alert, StyleSheet, TouchableOpacity } from 'react-native';
-import { loginUser, registerUser } from './api';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from './authContext';
 
 const AuthForm = () => {
+  const { login, register } = useAuth();
   const [isLogin, setIsLogin] = useState(true); // Toggle between login and registration
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -12,18 +13,22 @@ const AuthForm = () => {
   const [error, setError] = useState('');
 
   const handleAuth = async () => {
-    const userData = isLogin ? { username, password } : { username, email, password };
+    setError('');
     try {
-        const result = isLogin ? await loginUser(userData) : await registerUser(userData);
-        const { token, refresh_token } = result; // Assuming API responds with these keys
-        await AsyncStorage.setItem('token', token);
-        await AsyncStorage.setItem('refreshToken', refresh_token);
-        isLogin ? router.push('/') : router.push('/(tabs)/profile');
-        Alert.alert(isLogin ? 'Login Successful' : 'Registration Successful', `Welcome, ${result.user.username}!`);
-    } catch (error: any ) {
-        setError(error["non_field_errors"][0] || 'An unexpected error occurred');
-        console.log("Error!", error["non_field_errors"][0]);
-        Alert.alert(isLogin ? 'Login Failed' : 'Registration Failed', error.error || 'Unknown Error');
+      if (isLogin) {
+        await login({ username, password });
+        Alert.alert('Login Successful', `Welcome back, ${username}!`);
+      } else {
+        await register({ username, email, password });
+        Alert.alert('Registration Successful', `Welcome, ${username}!`);
+      }
+    } catch (err: any) {
+      const errorMessage = err?.non_field_errors?.[0] || 'An unexpected error occurred';
+      setError(errorMessage);
+      Alert.alert(
+        isLogin ? 'Login Failed' : 'Registration Failed', 
+        errorMessage
+      );
     }
   };
 

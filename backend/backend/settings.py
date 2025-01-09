@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "dj_rest_auth",
     'corsheaders',
     'accounts',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -139,6 +140,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication', 
+        'rest_framework_simplejwt.token_blacklist',
     ),
 }
 
@@ -147,4 +149,6 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=3),
     # allow refreshing of tokens
     'JWT_ALLOW_REFRESH': True,
+    # Allow blacklisting after circulation
+    'BLACKLIST_AFTER_ROTATION': True,
 }

@@ -1,9 +1,23 @@
 import { StyleSheet } from 'react-native';
-
+import { useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
+import { useAuth } from '../(auth)/authContext';
 
 export default function TabTwoScreen() {
+  const navigation = useNavigation();
+  const { isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) {
+      // Programmatically navigate to the login screen
+      useEffect(() => {
+          navigation.navigate('login');
+      }, [navigation]);
+
+      return null;  // Render nothing until we navigate
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Home</Text>
