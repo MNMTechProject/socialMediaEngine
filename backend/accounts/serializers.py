@@ -74,7 +74,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
       
-      
 class FollowToggleSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150)
     

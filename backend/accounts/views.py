@@ -1,15 +1,20 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, permissions, status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken, Token
+from rest_framework_simplejwt.authentication import JWTAuthentication as JWTAuth
+
 from .serializers import UserDisplaySerializer, RegisterSerializer, LoginSerializer, UserSerializer
 from .serializers import ProfileSerializer, FollowToggleSerializer
-from rest_framework_simplejwt.tokens import RefreshToken, Token
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from django.contrib.auth.models import User
 
-from rest_framework.permissions import IsAuthenticated
+from .models import Profile
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -54,7 +59,7 @@ class LoginAPI(generics.GenericAPIView):
             return Response({"error": "Invalid credentials"}, status=400)
 
 class LogoutAPI(APIView):
-    authentication_classes = [JWTAuthentication]  
+    authentication_classes = (JWTAuth,)
     permission_classes = [IsAuthenticated]         
 
     def post(self, request):
@@ -74,7 +79,7 @@ class LogoutAPI(APIView):
 
 # Get User API
 class UserAPI(generics.RetrieveAPIView):
-    authentication_classes = [JWTAuthentication] 
+    authentication_classes = (JWTAuth,)
     serializer_class = UserDisplaySerializer
     
     def get_object(self):
@@ -91,6 +96,7 @@ class UserAPI(generics.RetrieveAPIView):
         return {'request': self.request}
 
 class ProfileUpdateAPIView(generics.RetrieveUpdateAPIView):
+    authentication_classes = (JWTAuth,)  # Add this line
     serializer_class = ProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
     
@@ -106,8 +112,9 @@ class ProfileUpdateAPIView(generics.RetrieveUpdateAPIView):
         return Response(serializer.data)
     
 class ProfileDetailView(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserDisplaySerializer
+    authentication_classes = (JWTAuth,)  # Add this line
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -116,12 +123,12 @@ class ProfileDetailView(generics.RetrieveAPIView):
         })
         return context
     
-    serializer_class = UserDisplaySerializer
-    lookup_field = 'username'
+    lookup_field = 'user__username'
     lookup_url_kwarg = 'username'
     
 
 class UserFollowView(APIView):
+    authentication_classes = (JWTAuth,)  # Add this line
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, username, *args, **kwargs):

@@ -48,7 +48,7 @@ export default function TabTwoScreen() {
       return;
     }
 
-    fetch(`http://localhost:8000/api/user/${username}`)  // Adjust the API URL based on your setup
+    fetch(`http://localhost:8000/api/user/${username}/profile/`)  // Adjust the API URL based on your setup
       .then(response => response.json())
       .then(data => setUserData(data))
       .catch(error => console.error('Error fetching data: ', error));
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginTop: 5,
-    marginLeft: 20,
+    marginLeft: 10,
   },
   separator: {
     marginVertical: 30,

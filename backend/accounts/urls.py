@@ -20,9 +20,9 @@ urlpatterns = [
     path('login/', LoginAPI.as_view(), name='login'),
     path('logout/', LogoutAPI.as_view(), name='logout'),
     path('signup/', RegisterAPI.as_view(), name='signup'),
-    path('<username>', UserAPI.as_view(), name='profile'),
+    path('<username>/', UserAPI.as_view(), name='user'),
     
-    path('<username>/', ProfileDetailView.as_view(), name='profile'),
-    path('<username>/follow', UserFollowView.as_view(), name='follow'),
-    path('<username>/edit', ProfileUpdateAPIView.as_view(), name='edit'),
+    path('<username>/profile/', ProfileDetailView.as_view(), name='profile'),
+    path('<username>/follow/', UserFollowView.as_view(), name='follow'),
+    path('<username>/edit/', ProfileUpdateAPIView.as_view(), name='edit'),
 ]
