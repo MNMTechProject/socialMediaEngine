@@ -57,7 +57,7 @@ export default function TabTwoScreen() {
   console.log(userData);
 
   return (
-    <ScrollView>
+    <ScrollView >
       <View style={styles.container}>
           <ImageBackground 
             source={require('../../assets/images/ErieNature.jpg')}
@@ -69,17 +69,56 @@ export default function TabTwoScreen() {
             
             <Avatar style={styles.avatar}></Avatar>
 
-            <Text style={styles.username}>{userData.username}</Text>
+            <View style={styles.toprow}>
+
+              <Text style={styles.username}>{userData.username}</Text>
+
+              <View style={styles.toprowbuttons}>
+
+                <button style={styles.editbutton}>edit</button>
+
+                <button style={styles.settingsbutton}>settings</button>
+
+              </View>
+
+            </View>
+            
+            
+             
             
             <Text>{userData.handle}</Text>
 
             <Text style={styles.bio}>{userData.bio}</Text>
 
             <View style={styles.statsContainer}>
-              <Text style={styles.stat}>{userData.follower_count} Posts</Text>
-              <Text style={styles.stat}>{userData.follower_count} Followers</Text>
-              <Text style={styles.stat}>{userData.following} Following</Text>
-              <Text style={styles.stat}>{userData.following} Notifications</Text>
+              <View style={styles.statsItem}>
+                <TouchableOpacity>
+                  <Text style={styles.stat}>{userData.follower_count}0</Text>
+                  <Text style={styles.stat}>Posts</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.statsItem}>
+                <TouchableOpacity>
+                  <Text style={styles.stat}>{userData.follower_count}0</Text>
+                  <Text style={styles.stat}>Followers</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.statsItem}>
+                <TouchableOpacity>
+                  <Text style={styles.stat}>{userData.follower_count}0</Text>
+                  <Text style={styles.stat}>Following</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.statsItem}>
+                <TouchableOpacity>
+                  <Text style={styles.stat}>{userData.follower_count}0</Text>
+                  <Text style={styles.stat}>Notifications</Text>
+                </TouchableOpacity>
+              </View>
+              
             </View>
           
             <TouchableOpacity >
@@ -99,15 +138,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  toprow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 5,
+  },
+  toprowbuttons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20
+  },
+  editbutton: {
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+  },
+  settingsbutton: {
+    paddingBlockStart: 'auto',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+  },
   webContainer: {
     justifyContent: 'center',
-    paddingLeft: 15,
   },
   username: {
     fontSize: 20,
     fontWeight: 'bold',
     marginTop: 5,
-    marginLeft: 10,
+    marginLeft: 20,
   },
   separator: {
     marginVertical: 30,
@@ -133,17 +190,18 @@ const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    padding: 5,
+    padding: 10,
+    
+  },
+  statsItem: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    paddingHorizontal: 7,
   },
   stat: {
     fontSize: 15,
     fontWeight: '600',
-    padding: 20,
-  },
-  settingsButton: {
-    alignItems: 'flex-end',
-    width: 40,
-    height: 40,
-    padding: 5,
+    textAlign: 'center',
+    paddingEnd: 10,
   },
 });
